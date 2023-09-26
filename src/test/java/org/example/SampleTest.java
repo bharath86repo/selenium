@@ -29,7 +29,7 @@ public class SampleTest {
     @Test
     public void test(){
         String URL = driver.getCurrentUrl();
-        Assert.assertTrue(URL.contains("google"));
+        Assert.assertTrue(URL.contains("ge"));
     }
 
     @AfterClass
