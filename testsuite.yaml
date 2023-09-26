@@ -7,11 +7,11 @@ image_resource:
     tag: latest
 
 inputs:
-  - name: sourcecode
+  - name: source-code
 outputs:
   - name: mvn-output
 
 run:
   path: /bin/bash
   args:
-    - sourcecode/testscript.sh
+    - source-code/testscript.sh
