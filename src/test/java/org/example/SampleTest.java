@@ -16,9 +16,7 @@ public class SampleTest {
     public void setUp(){
     	ChromeOptions options = new ChromeOptions();
         options.addArguments("--headless");
-        options.addArguments("--disable-gpu");
         driver = new ChromeDriver(options);
-
         driver.manage().window().maximize();
         driver.get("https://google.com/");
     }
