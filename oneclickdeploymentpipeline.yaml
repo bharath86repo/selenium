@@ -1,0 +1,82 @@
+resources:
+- name: source-code
+  type: git
+  source:
+    uri: https://github.com/bharath86repo/selenium
+    branch: main
+    
+jobs: 
+- name: dev
+  serial: true
+  plan:
+  - get: source-code
+    trigger: true
+  - task: deploy
+    config:
+      platform: linux
+      image_resource:
+        type: registry-image
+        source: {repository: alpine}
+      run:
+        path: echo
+        args: ["Dev Deployment Successful!"]  
+  - task: mvn-test
+    privileged: true
+    file: source-code/testsuite.yaml
+    
+- name: qa
+  serial: true
+  plan:
+  - get: source-code
+    passed: [dev]
+    trigger: true
+  - task: deploy
+    config:
+      platform: linux
+      image_resource:
+        type: registry-image
+        source: {repository: alpine}
+      run:
+        path: echo
+        args: ["QA Deployment Successful!"]  
+  - task: mvn-test
+    privileged: true
+    file: source-code/testsuite.yaml
+    
+- name: stage
+  serial: true
+  plan:
+  - get: source-code
+    passed: [qa]
+    trigger: true
+  - task: deploy
+    config:
+      platform: linux
+      image_resource:
+        type: registry-image
+        source: {repository: alpine}
+      run:
+        path: echo
+        args: ["Stage Deployment Successful!"]  
+  - task: mvn-test
+    privileged: true
+    file: source-code/testsuite.yaml
+
+- name: prod
+  serial: true
+  plan:
+  - get: source-code
+    passed: [stage]
+    trigger: true
+  - task: deploy
+    config:
+      platform: linux
+      image_resource:
+        type: registry-image
+        source: {repository: alpine}
+      run:
+        path: echo
+        args: ["Prod Deployment Successful!"]  
+  - task: mvn-test
+    privileged: true
+    file: source-code/testsuite.yaml    
